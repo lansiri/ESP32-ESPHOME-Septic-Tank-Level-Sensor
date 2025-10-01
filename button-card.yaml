@@ -1,0 +1,51 @@
+type: custom:button-card
+entity: sensor.esphome_web_a69f8c_septic_level
+name: 💩
+show_icon: false
+show_state: true
+show_name: true
+aspect_ratio: 1/1
+tap_action:
+  action: more-info
+variables:
+  eid: sensor.esphome_web_a69f8c_septic_level
+styles:
+  card:
+    - border-radius: 1.5rem
+    - padding: 0
+    - font-size: 22px
+    - text-align: center
+    - box-shadow: 0 8px 30px rgba(0,0,0,.15)
+    - background: |
+        [[[
+          const raw =
+            (typeof entity !== 'undefined' && entity && entity.state !== undefined)
+              ? entity.state
+              : (hass.states[variables.eid]?.state ?? 0);
+
+          const p = Math.max(0, Math.min(100, Number(raw)));
+          // brown fill from bottom up
+          return `linear-gradient(to top, #7a4b25 ${p}%, transparent ${p}%)`;
+        ]]]
+  name:
+    - font-size: 80px
+    - line-height: 1
+    - margin-top: 8px
+  state:
+    - font-size: 16px
+    - padding-bottom: 8px
+label: |
+  [[[
+    const raw =
+      (typeof entity !== 'undefined' && entity && entity.state !== undefined)
+        ? entity.state
+        : (hass.states[variables.eid]?.state ?? 0);
+
+    const p = Number(raw);
+    if (p >= 90) return "🚨 Code Brown imminent";
+    if (p >= 70) return "💩 Getting… spicy";
+    if (p >= 40) return "💩 Halfway to havoc";
+    if (p >= 10) return "💩 So far, so good";
+    return "✨ Fresh air vibes";
+  ]]]
+show_label: true
